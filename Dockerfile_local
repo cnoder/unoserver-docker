@@ -1,0 +1,5 @@
+FROM ghcr.io/unoconv/unoserver-docker
+
+ENV UNOSERVER_PORT=2002
+
+ENTRYPOINT ["/config/entrypoint.sh"]

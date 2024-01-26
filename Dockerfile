@@ -64,5 +64,6 @@ WORKDIR /home/worker
 ENV HOME="/home/worker"
 
 VOLUME ["/data"]
+ENV UNOSERVER_PORT=2002
 
 ENTRYPOINT ["/config/entrypoint.sh"]

@@ -15,12 +15,14 @@ fi
 
 export UNIX_HTTP_SERVER_PASSWORD=${UNIX_HTTP_SERVER_PASSWORD:-`cat /proc/sys/kernel/random/uuid`}
 
+export UNOSERVER_PORT=${UNOSERVER_PORT:-2002}
+
 # run supervisord detached...
 supervisord $SUPERVISOR_PARAMS
 
 # wait until unoserver started and listens on port 2002.
 echo "Waiting for unoserver to start ..."
-while [ -z "`netstat -tln | grep 2002`" ]; do
+while [ -z "`netstat -tln | grep ":$UNOSERVER_PORT"`" ]; do
   # echo "Waiting for unoserver to start ..."
   sleep 1
 done
@@ -31,5 +33,7 @@ libreoffice --version
 if [[ $@ ]]; then
   eval $@
 else
-  /bin/bash
+  while true; do
+    sleep 60
+  done
 fi

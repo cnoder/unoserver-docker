@@ -1,47 +1,45 @@
 # Unoserver Docker Image
 
 Docker image for unoserver
-
-## The environment
-
-This Docker image uses Alpine Linux as base image and provides:
-
-- [LibreOffice](https://www.libreoffice.org/)
-
-- [unoserver](https://github.com/unoconv/unoserver)
-
-- Fonts (alpine packages)
-  - font-noto
-  - font-noto-cjk
-  - font-noto-extra
-  - terminus-font
-  - ttf-font-awesome
-  - ttf-dejavu
-  - ttf-freefont
-  - ttf-hack
-  - ttf-inconsolata
-  - ttf-liberation
-  - ttf-mononoki 
-  - ttf-opensans  
+## Changes from unoserver-docker
+- Rewritten entrypoint: Supports interactive, remote, and docker exec.
+- Customizable Port: Default 2002 Port for Running Multiple Instances on a Single Machine.
 
 ## How to use it
 
-Just run:
+### Build image:
 
-    docker run -it -v <your directory>:/data/ ghcr.io/unoconv/unoserver-docker
+    docker build -t your-image-name .
+If you already have the ghcr.io/unoconv/unoserver-docker image locally.
 
-or to convert directly:
+    docker build -t your-image-name -v Dockerfile_local
+### How to run:
 
-    docker run -it -v <your directory>:/data/ ghcr.io/unoconv/unoserver-docker unoconvert /data/document.docx /data/document.pdf
+you can run as origin image ghcr.io/unoconv/unoserver-docker
 
-Docker maps your directory with /data directory in the container.
+```shell
+docker run -it -v <your directory>:/data/ <your-image-name> unoconvert /data/document.docx /data/document.pdf
+```
 
-You might need to add the option `:z` or `:Z` like `<your directory>:/data/:z` or `<your directory>:/data/:Z` if you are using SELinux. See [Docker docs](https://docs.docker.com/storage/bind-mounts/#configure-the-selinux-label) or [Podman docs](https://docs.podman.io/en/latest/markdown/podman-run.1.html#volume-v-source-volume-host-dir-container-dir-options).
+You can run it in the background also.
+if we use port 2008,and use contain name unoserver-background-docker
+```shell
+docker run --name unoserver-background-docker -e UNOSERVER_PORT=2008 -d -v <your directory>:/data/ <your-image-name>
+```
+we can convert it later
+```shell
+docker exec unoserver-background-docker unoconvert --port 2008 /data/example.docx /data/example.pdf 
+```
+or we can use local unoserver cli on host machine. it can connect container port 2008
+```shell
+unoconvert --port 2008 /data/example.docx /data/example.pdf 
+```
 
-After you start the container, you can use [unoconvert](https://github.com/unoconv/unoserver#unoconvert) command to convert documents using LibreOffice.
-
-
-## How to contribute / do it yourself?
+[x] todo
+we also can start several containers by docker compose
+```shell
+docker composer up
+```
 
 ### Requirements
 
@@ -49,8 +47,5 @@ You need the following tools:
 
 - A bash compliant command line
 
-- Docker installed and in your path
+- Docker & Docker composer installed and in your path
 
-### How to build
-
-        docker build .
