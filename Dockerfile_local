@@ -1,5 +1,13 @@
 FROM ghcr.io/unoconv/unoserver-docker
 
+COPY --chown=${UID}:${GID} ${BUILD_CONTEXT}/supervisor /
+RUN chmod +x /config/entrypoint.sh
+#    mkdir -p /var/log/supervisor && \
+#    chown ${UID}:${GID} /var/log/supervisor && \
+#    mkdir -p /var/run && \
+#    chown -R ${UID}:0 /run && \
+#    chmod -R g=u /run \
+
 ENV UNOSERVER_PORT=2002
 
 ENTRYPOINT ["/config/entrypoint.sh"]
