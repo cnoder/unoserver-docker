@@ -12,7 +12,7 @@ Docker image for unoserver
     docker build -t your-image-name .
 If you already have the ghcr.io/unoconv/unoserver-docker image locally.
 
-    docker build -t your-image-name -v Dockerfile_local
+    docker build -f Dockerfile_local -t  <your-image-name> .
 ### How to run:
 
 you can run as origin image ghcr.io/unoconv/unoserver-docker
@@ -26,7 +26,7 @@ if we use port 2008,and use contain name unoserver-background-docker
 ```shell
 docker run --name unoserver-background-docker -e UNOSERVER_PORT=2008 -d -v <your directory>:/data/ <your-image-name>
 ```
-we can convert it later
+If you don't want to install Unoserver on your host machine.
 ```shell
 docker exec unoserver-background-docker unoconvert --port 2008 /data/example.docx /data/example.pdf 
 ```
@@ -34,12 +34,15 @@ or we can use local unoserver cli on host machine. it can connect container port
 ```shell
 unoconvert --port 2008 /data/example.docx /data/example.pdf 
 ```
-
-[x] todo
-we also can start several containers by docker compose
+### todo
+-[ ] we also can start several containers by docker compose
 ```shell
 docker composer up
 ```
+
+-[ ] use supervisor numprocs  to start multiple instances in a container.
+
+-[ ] use nginx proxy multiple instances.
 
 ### Requirements
 
